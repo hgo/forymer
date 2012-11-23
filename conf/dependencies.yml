@@ -1,0 +1,6 @@
+# Application dependencies
+
+require:
+    - play
+    - net.sf.flexjson -> flexjson 2.1
+#    - play -> guice 1.2
