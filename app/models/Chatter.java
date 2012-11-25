@@ -51,8 +51,11 @@ public class Chatter extends Model {
         chatRoom = chatRoom.save();
         this.chatRoom = chatRoom;
         this.save();
-        return chatRoom.refresh();
+        chatRoom = chatRoom.refresh();
+        chatRoom.getMessagingStream(true);
+        return chatRoom;
     }
+    
 
     public ChatRoom joinChatRoom(ChatRoom chatRoom) {
         if (this.chatRoom != null) {
@@ -79,7 +82,9 @@ public class Chatter extends Model {
     }
 
     public Message addMessage(String messageText) {
-        return new Message(messageText, this, this.chatRoom).save();
+        Message message =new Message(messageText, this, this.chatRoom).save();
+        this.chatRoom.getMessagingStream(false).publish(message);
+        return message;
     }
 
     public String getName() {

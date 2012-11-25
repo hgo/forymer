@@ -8,7 +8,7 @@ import service.CacheService;
 
 public class ForymerConstants {
 
-    public final static String CHATTER_REQUEST_ARG_KEY = "chatter";
+    private final static String CHATTER_REQUEST_ARG_KEY = "chatter";
 
     public static Chatter getCurrentChatter() {
         Chatter c = (Chatter) Request.current().args.get(CHATTER_REQUEST_ARG_KEY);

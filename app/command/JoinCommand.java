@@ -7,14 +7,16 @@ public class JoinCommand extends AbstractCommand {
 
     @Required
     public Long id;
-
+    
     @Override
     public void validate() {
         super.validate();
+        ChatRoom chatRoom = ChatRoom.findById(id);
         if (isClean()) {
-            if (ChatRoom.findById(id) == null) {
+            if (chatRoom == null) {
                 addError("id", "no.chatroom.found");
             }
         }
+        addToRequestArgs("chatRoom", chatRoom);
     }
 }

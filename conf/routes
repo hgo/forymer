@@ -9,6 +9,7 @@ POST    /message                                Application.message
 POST    /chatroom                               Application.chatroom
 POST    /join                                   Application.join
 POST    /leave                                  Application.leave
+POST    /consume                                Application.consume
 
 # Ignore favicon requests
 GET     /favicon.ico                            404

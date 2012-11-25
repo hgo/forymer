@@ -5,14 +5,18 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PreRemove;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
+import play.cache.Cache;
 import play.db.jpa.Model;
 
 @Entity
 public class ChatRoom extends Model {
+
+    private static final String CACHE_SUFFIX = "_ch";
 
     private String name;
 
@@ -32,6 +36,25 @@ public class ChatRoom extends Model {
         super();
         this.name = name;
         this.geoLocation = geoLocation;
+    }
+    
+    private String cacheName(){
+        return this.id + CACHE_SUFFIX;
+    }
+    
+    public MessagingStream getMessagingStream(boolean createIfNotExists) {
+        String cacheName = cacheName();
+        MessagingStream messagingStream = Cache.get(cacheName, MessagingStream.class);
+        if (messagingStream == null && createIfNotExists) {
+            messagingStream = new MessagingStream();
+            Cache.add(cacheName, messagingStream);
+        }
+        return messagingStream;
+    }
+    
+    @PreRemove
+    void preRemove(){
+        Cache.delete(cacheName());
     }
 
     public Integer getChatterCount() {

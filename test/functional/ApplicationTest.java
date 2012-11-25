@@ -10,6 +10,8 @@ import models.GeoLocation;
 import org.junit.Before;
 import org.junit.Test;
 
+import play.Logger;
+import play.cache.Cache;
 import play.mvc.Http.Response;
 import play.test.Fixtures;
 import play.test.FunctionalTest;
@@ -24,6 +26,7 @@ public class ApplicationTest extends FunctionalTest {
     @Before
     public void before() {
         Fixtures.deleteDatabase();
+        Cache.clear();
         chatter = new Chatter("test1", GeoLocation.fromDegrees(40.97d, 28.92d));
         chatter.save();
     }
@@ -105,6 +108,29 @@ public class ApplicationTest extends FunctionalTest {
         assertStatus(200, response);
         bob.refresh();
         assertEquals(c, bob.getChatRoom());
+    }
+    
+    @Test
+    public void testConsume() {
+        login("bob");
+        Chatter bob = Chatter.findByName("bob");
+        ChatRoom c = chatter.createChatRoom("testJoinRoom");
+        assertNull(bob.getChatRoom());
+        HashMap<String, String> map = new HashMap<String, String>();
+        map.put("c.id", c.id + "");
+        Response response = POST("/join", map);
+        assertStatus(200, response);
+        bob.refresh();
+        assertEquals(c, bob.getChatRoom());
+        map.clear();
+        map.put("c.messageText", "lan olm bu ne hal!");
+        Response messageResponse = POST("/message", map);
+        assertStatus(200, messageResponse);
+        map.clear();
+        map.put("lastEventSeen", "0");
+        Response response2 = POST("/consume",map);
+        Logger.info(getContent(response2));
+        
     }
 
     private Response login(String username) {

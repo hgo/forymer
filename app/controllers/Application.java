@@ -1,9 +1,14 @@
 package controllers;
 
 import static utils.ForymerConstants.getCurrentChatter;
+
+import java.util.List;
+
 import models.ChatRoom;
 import models.Chatter;
+import models.Message;
 import play.Logger;
+import play.libs.F.IndexedEvent;
 import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.With;
@@ -14,6 +19,8 @@ import command.CommandedAction;
 import command.JoinCommand;
 import command.LoginCommand;
 import command.MessageCommand;
+
+import flexjson.JSONSerializer;
 
 @With(CommandController.class)
 public class Application extends Controller {
@@ -32,6 +39,7 @@ public class Application extends Controller {
     public static void login(LoginCommand c) {
         Chatter chatter = ForymerService.createNewChatter(c.name, c.latitude, c.longitude);
         ForymerConstants.putCurrentChatter(chatter);
+        ok();
     }
 
     public static void index() {
@@ -46,7 +54,7 @@ public class Application extends Controller {
     @CommandedAction(clazz = JoinCommand.class, name = "c")
     public static void join(JoinCommand c) {
         Logger.info("currentUser: %s", getCurrentChatter().getName());
-        getCurrentChatter().joinChatRoom((ChatRoom) ChatRoom.findById(c.id));
+        getCurrentChatter().joinChatRoom((ChatRoom) request.args.get("chatRoom"));
         ok();
     }
 
@@ -58,5 +66,11 @@ public class Application extends Controller {
     @CommandedAction(clazz = MessageCommand.class, name = "c")
     public static void message(MessageCommand c) {
         getCurrentChatter().addMessage(c.messageText);
+        ok();
+    }
+    
+    public static void consume(long lastEventSeen) {
+        List<IndexedEvent<Message>> list = await(getCurrentChatter().getChatRoom().getMessagingStream(false).nextEvents(lastEventSeen));
+        renderJSON(new JSONSerializer().include("id","data.messageText","data.owner.name","data.dateCreated").exclude("*").serialize(list));
     }
 }
