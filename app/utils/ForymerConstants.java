@@ -9,13 +9,15 @@ import service.CacheService;
 public class ForymerConstants {
 
     private final static String CHATTER_REQUEST_ARG_KEY = "chatter";
-
+    
     public static Chatter getCurrentChatter() {
         Chatter c = (Chatter) Request.current().args.get(CHATTER_REQUEST_ARG_KEY);
         if (c == null) {
             Long id = (Long) Cache.get(Session.current().getId());
             if (id != null) {
-                return Chatter.findById(id);
+                Chatter chatter = Chatter.findById(id);
+                Request.current().args.put(CHATTER_REQUEST_ARG_KEY, chatter);
+                return chatter;
             }
         }
         return c;
@@ -24,5 +26,9 @@ public class ForymerConstants {
     // comes from logger
     public static void putCurrentChatter(Chatter chatter) {
         CacheService.getInstance().updateOrPut(Session.current().getId(), chatter.id, Long.class, "1h");
+    }
+    
+    public static void logoutChatter() {
+        Cache.delete(Session.current().getId());
     }
 }

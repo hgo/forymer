@@ -1,0 +1,28 @@
+#{extends 'main.html' /}
+#{set 'moreScripts'}
+<script type="text/javascript">
+
+</script>
+#{/set}
+
+<div data-role="page" id="chatroom" data-url="/chatroom#${room.name}">
+	<div data-role="header">
+		<h1>&{'welcome.header'}</h1>
+	</div>
+	<!-- /header -->
+	<div data-role="content">
+		<div class="ui-grid-a">
+			<div class="ui-block-a" style="width: 65%;height: 100%;	">
+			<ul id="mlist">
+			</ul>
+			<span>welcome to ${room.name}</span><br>
+			</div>
+			<div class="ui-block-b" style="width: 35%;">
+				<input type="text" placeholder="say something" id="message">
+				<input type="button" value="2asdsa" id="messagebtn">
+			</div>	   
+		</div>
+	</div>
+	<!-- /content -->
+</div>
+<!-- /page -->

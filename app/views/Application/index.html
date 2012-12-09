@@ -1,4 +1,20 @@
-#{extends 'main.html' /}
-#{set title:'Home' /}
-
-#{welcome /}
+#{extends 'main.html' /} 
+#{set 'moreScripts'}
+#{navscript latDom:'latDom' , lngDom : 'lngDom'/}
+#{/set}
+<div data-role="page" id="index" data-url="/">
+	<div data-role="header">
+		<h1>&{'welcome.header'}</h1>
+	</div>
+	<!-- /header -->
+	<div data-role="content">
+		<form method="post" id="loginform" action="login">
+			<label for="username" class="ui-hidden-accessible">username</label> 
+			<input type="text" name="c.name" id="username" value=""placeholder="Username" /> 
+				<input type="hidden" id="latDom" name="c.latitude"> <input type="hidden" id="lngDom"name="c.longitude">
+				<input id="joinbtn" type="submit" value="&{'join.btn.text'}" />
+		</form>
+	</div>
+	<!-- /content -->
+</div>
+<!-- /page -->

@@ -1,0 +1,24 @@
+ <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+
+    <script type="text/javascript">
+
+    	$(document).bind('pageinit',function() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(success, error);
+                } else {
+                    error('Geolocation not supported');
+                }
+        });  
+
+
+        function success(position) {
+          $("#${_latDom}").val(position.coords.latitude);
+          $("#${_lngDom}").val(position.coords.longitude);
+        }
+        
+
+        function error(msg) {
+          var errMsg = typeof msg == 'string' ? msg : "Geolocation failed";
+          $('#msg').html(errMsg);
+        }
+    </script>

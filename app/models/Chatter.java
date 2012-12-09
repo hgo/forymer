@@ -31,19 +31,19 @@ public class Chatter extends Model {
         this.geoLocation = geoLocation;
     }
 
-    public List<Chatter> getNearChatters(double distance) {
+    public List<ChatRoom> getNearChatRooms(double distance) {
         GeoLocation location = this.geoLocation;
         GeoLocation[] boundingCoordinates = location.boundingCoordinates(distance, GeoLocation.RADIUS);
         for (GeoLocation bound : boundingCoordinates) {
             Logger.info(bound.getDegLat() + " " + bound.getDegLon());
         }
         boolean meridian180WithinDistance = boundingCoordinates[0].getRadLon() > boundingCoordinates[1].getRadLon();
-        return Chatter.find(
-                "select chatter from Chatter chatter join chatter.geoLocation geo " + "where (geo.radLat >= ? and geo.radLat <= ? ) and (geo.radLon >= ? "
+        return ChatRoom.find(
+                "select chatRoom from ChatRoom chatRoom join chatRoom.geoLocation geo " + "where (geo.radLat >= ? and geo.radLat <= ? ) and (geo.radLon >= ? "
                         + (meridian180WithinDistance ? "OR" : "AND") + " geo.radLon <= ? ) and "
-                        + "(acos(sin(?) * sin(geo.radLat) + cos(?) * cos(geo.radLat) * cos(geo.radLon - ?)) <= ?) and chatter!=?",
+                        + "(acos(sin(?) * sin(geo.radLat) + cos(?) * cos(geo.radLat) * cos(geo.radLon - ?)) <= ?)",
                 boundingCoordinates[0].getRadLat(), boundingCoordinates[1].getRadLat(), boundingCoordinates[0].getRadLon(), boundingCoordinates[1].getRadLon(),
-                location.getRadLat(), location.getRadLat(), location.getRadLon(), distance / GeoLocation.RADIUS, this).fetch();
+                location.getRadLat(), location.getRadLat(), location.getRadLon(), distance / GeoLocation.RADIUS).fetch();
     }
 
     public ChatRoom createChatRoom(String roomName) {

@@ -26,11 +26,13 @@ public class ChatterUnitTest extends UnitTest {
     }
 
     @Test
-    public void testNearChatters() {
+    public void testNearChatRooms() {
+        chatter.createChatRoom("room1");
         Chatter chatter2 = new Chatter("test2", GeoLocation.fromDegrees(41d, 28.9d));
         chatter2.save();
-        List<Chatter> list = chatter.getNearChatters(5d);
+        List<ChatRoom> list = chatter.getNearChatRooms(5d);
         assertEquals(1, list.size());
+        assertEquals("room1", list.get(0).getName());
     }
 
     @Test

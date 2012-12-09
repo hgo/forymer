@@ -39,23 +39,46 @@ public class Application extends Controller {
     public static void login(LoginCommand c) {
         Chatter chatter = ForymerService.createNewChatter(c.name, c.latitude, c.longitude);
         ForymerConstants.putCurrentChatter(chatter);
-        ok();
+        chatrooms();
+    }
+
+    public static void logout() {
+        ForymerConstants.logoutChatter();
+        session.clear();
+        index();
+    }
+
+    public static void chatrooms() {
+        List<ChatRoom> rooms = getCurrentChatter().getNearChatRooms(5.0);
+        render(rooms);
     }
 
     public static void index() {
+        if (getCurrentChatter() != null)
+            chatrooms();
         render();
     }
 
-    public static void chatroom(String name) {
+    public static void chatroom() {
+        renderArgs.put("room", getCurrentChatter().getChatRoom());
+        render();
+    }
+
+    public static void createChatroom(String name) {
         getCurrentChatter().createChatRoom(name);
-        ok();
+        chatroom();
     }
 
     @CommandedAction(clazz = JoinCommand.class, name = "c")
     public static void join(JoinCommand c) {
-        Logger.info("currentUser: %s", getCurrentChatter().getName());
+        Chatter chatter = getCurrentChatter();
+        if (chatter.getChatRoom() != null) {
+            if (chatter.getChatRoom().id == ((ChatRoom) request.args.get("chatRoom")).id) {
+                chatroom();
+            }
+        }
         getCurrentChatter().joinChatRoom((ChatRoom) request.args.get("chatRoom"));
-        ok();
+        chatroom();
     }
 
     public static void leave() {
@@ -68,9 +91,11 @@ public class Application extends Controller {
         getCurrentChatter().addMessage(c.messageText);
         ok();
     }
-    
+
     public static void consume(long lastEventSeen) {
+        if (getCurrentChatter() == null)
+            error();
         List<IndexedEvent<Message>> list = await(getCurrentChatter().getChatRoom().getMessagingStream(false).nextEvents(lastEventSeen));
-        renderJSON(new JSONSerializer().include("id","data.messageText","data.owner.name","data.dateCreated").exclude("*").serialize(list));
+        renderJSON(new JSONSerializer().include("id", "data.messageText", "data.owner.name", "data.dateCreated").exclude("*").serialize(list));
     }
 }

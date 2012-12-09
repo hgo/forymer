@@ -6,10 +6,13 @@
 GET     /                                       Application.index
 POST    /login                                  Application.login
 POST    /message                                Application.message
-POST    /chatroom                               Application.chatroom
+POST    /createChatroom                         Application.createChatroom
+GET     /chatroom                               Application.chatroom
+GET     /chatrooms                              Application.chatrooms
 POST    /join                                   Application.join
 POST    /leave                                  Application.leave
 POST    /consume                                Application.consume
+GET     /logout                                 Application.logout
 
 # Ignore favicon requests
 GET     /favicon.ico                            404
