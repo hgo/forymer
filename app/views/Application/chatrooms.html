@@ -9,11 +9,11 @@
 		#{list items:rooms, as:'room'}
 			<li><form action="@{Application.join}" method="post">
 				<input type="hidden" value="${room.id}" name="c.id">
-				<input type="submit" value="${room.name}" data-type="button"></form>
+				<input type="submit" value="${room.name}"></form>
 			</li> 
 		#{/list} 
 		#{else}
-			<li><a href="#createChatroom">&{'create.room'}</a></li>
+			<li><a href="#createchatroom">&{'create.room'}</a></li>
 		#{/else}
 		</ul>
 		<!-- /listview-->
@@ -22,7 +22,7 @@
 </div>
 <!-- /page -->
 
-<div data-role="page" id="createChatroom" data-url="createChatroom" rel="external">
+<div data-role="page" id="createchatroom">
 	<div data-role="header">
 		<h1>&{'welcome.header'}</h1>
 	</div>
@@ -31,6 +31,7 @@
 		<form action="@{Application.createChatroom}" method="post">
 		<input type="text" name="name" placeholder="name?">
 		<input type="submit" value="create.room">
+		</form>
 	</div>
 	<!-- /content -->
 </div>

@@ -49,7 +49,7 @@ public class Application extends Controller {
     }
 
     public static void chatrooms() {
-        List<ChatRoom> rooms = getCurrentChatter().getNearChatRooms(5.0);
+        List<ChatRoom> rooms = getCurrentChatter().getNearChatRooms(10d);
         render(rooms);
     }
 

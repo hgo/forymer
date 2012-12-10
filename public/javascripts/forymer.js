@@ -28,6 +28,7 @@ $( document ).delegate("#chatroom", "pageinit", function() {
 		  if(t){
 			  $.ajax({url:'/message',type:'post',data:{'c.messageText' : t},success:function(){
 				  console.log(t);
+				  $('#message').val('');
 				  }});
 			  }
 		  }
@@ -40,7 +41,7 @@ $( document ).delegate("#chatroom", "pageinit", function() {
 	            			 type:'post',
 	            			 success:function(events) {
 	                         $(events).each(function() {
-	                        	 var html = "<li><span>" + this.data.messageText + "</span></li>";
+	                        	 var html = "<li>"+this.data.owner.name+":&nbsp<span>" + this.data.messageText + "</span></li>";
 	                             $('#mlist').append(html);
 	                             lastEventSeen = this.id;
 	                         });
