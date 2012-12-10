@@ -83,7 +83,7 @@ public class Chatter extends Model {
 
     public Message addMessage(String messageText) {
         Message message =new Message(messageText, this, this.chatRoom).save();
-        this.chatRoom.getMessagingStream(false).publish(message);
+        this.chatRoom.getMessagingStream(true).publish(message);
         return message;
     }
 

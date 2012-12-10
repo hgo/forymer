@@ -52,3 +52,9 @@ $( document ).delegate("#chatroom", "pageinit", function() {
 // });
 });
 
+$( document ).delegate("#chatrooms", "pageinit", function() {
+	$('.chatroomlistli').on('click',function(){
+		$('#'+$(this).data('formid')).submit();
+	});	
+});
+

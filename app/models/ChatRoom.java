@@ -5,7 +5,10 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PostLoad;
 import javax.persistence.PreRemove;
+
+import net.sf.oval.guard.Pre;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -18,6 +21,8 @@ public class ChatRoom extends Model {
 
     private static final String CACHE_SUFFIX = "_ch";
 
+    private transient Integer chatterCount = null;
+    
     private String name;
 
     @OneToMany(mappedBy = "chatRoom")
@@ -56,9 +61,19 @@ public class ChatRoom extends Model {
     void preRemove(){
         Cache.delete(cacheName());
     }
-
+    @PostLoad
+    void postLoad(){
+        getChatterCount();
+    }
+    
+    public void setChatterCount(Integer chatterCount) {
+        this.chatterCount = chatterCount;
+    }
     public Integer getChatterCount() {
-        return ChatRoom.find("select size(chatters) from ChatRoom where id=?", this.id).first();
+        if(chatterCount == null){
+            setChatterCount((Integer) ChatRoom.find("select size(chatters) from ChatRoom where id=?", this.id).first());
+        }
+        return this.chatterCount;
     }
 
     public static ChatRoom findByName(String name) {

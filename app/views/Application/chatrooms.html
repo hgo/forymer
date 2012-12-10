@@ -7,15 +7,18 @@
 	<div data-role="content">
 		<ul data-role="listview">
 		#{list items:rooms, as:'room'}
-			<li><form action="@{Application.join}" method="post">
+			<li data-formid="f${room.id}" class="chatroomlistli" ><form id="f${room.id}" action="@{Application.join}" method="post" style="display: none">
 				<input type="hidden" value="${room.id}" name="c.id">
-				<input type="submit" value="${room.name}"></form>
+<!-- 				<input type="submit" value="${room.name} (${room.chatterCount})"> -->
+				</form>
+				<img border="0" src="//maps.googleapis.com/maps/api/staticmap?center=${request.args.chatter.geoLocation.degLat+',' + request.args.chatter.geoLocation.degLon}&amp;zoom=15&amp;size=180x180&amp;sensor=false" alt="Greenwich, England">
+				<a href="#">${room.name} (${room.chatterCount})</a>
+				
 			</li> 
 		#{/list} 
-		#{else}
 			<li><a href="#createchatroom">&{'create.room'}</a></li>
-		#{/else}
 		</ul>
+		<img border="0" src="//maps.googleapis.com/maps/api/staticmap?center=${request.args.chatter.geoLocation.degLat+',' + request.args.chatter.geoLocation.degLon}&amp;zoom=15&amp;size=180x180&amp;sensor=false" alt="Greenwich, England">
 		<!-- /listview-->
 	</div>
 	<!-- /content -->
@@ -29,7 +32,7 @@
 	<!-- /header -->
 	<div data-role="content">
 		<form action="@{Application.createChatroom}" method="post">
-		<input type="text" name="name" placeholder="name?">
+		<input type="text" name="name" placeholder="name?" value="${request.args.chatter.name}'s room">
 		<input type="submit" value="create.room">
 		</form>
 	</div>

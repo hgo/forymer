@@ -2,7 +2,11 @@ package controllers;
 
 import static utils.ForymerConstants.getCurrentChatter;
 
+import java.util.Collections;
 import java.util.List;
+
+import org.apache.commons.beanutils.BeanComparator;
+import org.apache.commons.collections.comparators.ReverseComparator;
 
 import models.ChatRoom;
 import models.Chatter;
@@ -50,6 +54,8 @@ public class Application extends Controller {
 
     public static void chatrooms() {
         List<ChatRoom> rooms = getCurrentChatter().getNearChatRooms(10d);
+        BeanComparator comparator = new BeanComparator("chatterCount",new ReverseComparator());
+        Collections.sort(rooms, comparator);
         render(rooms);
     }
 
