@@ -33,6 +33,19 @@ $( document ).delegate("#chatroom", "pageinit", function() {
 			  }
 		  }
 		 );
+		 function prependMessage(map){
+				var _res = map.events;
+				var html;
+				var m = $("#messages");
+				var f = map.f;
+				var lastEventId;
+				$.each(_res,function(index){
+					html = "<p>"+this.data.owner.name+": "+this.data.messageText +"</p>";
+					lastEventId = this.id;
+					m.prepend(html);
+				});
+				f(lastEventId);
+			}
 		 var lastEventSeen = 0;
 		 var getMessages = function() {
 	             $.ajax(
@@ -40,12 +53,11 @@ $( document ).delegate("#chatroom", "pageinit", function() {
 	            			 data:{lastEventSeen:lastEventSeen},
 	            			 type:'post',
 	            			 success:function(events) {
-	                         $(events).each(function() {
-	                        	 var html = "<li>"+this.data.owner.name+":&nbsp<span>" + this.data.messageText + "</span></li>";
-	                             $('#mlist').append(html);
-	                             lastEventSeen = this.id;
-	                         });
-	                         getMessages();
+	                        	 //chatroom.html
+	            				 prependMessage({events:events, f:function(lastEventId){
+	            					 lastEventSeen = lastEventId;
+	            					 getMessages();
+	            				 }});
 	                     }});
 	     };
 	     getMessages();

@@ -29,7 +29,12 @@ public class LoginCommand extends AbstractCommand {
         super.validate();
         if (isClean()) {
             if (Chatter.findByName(this.name) != null) {
-                addError("name", "validation.unique");
+                addError("command.name", "validation.unique");
+            }
+        }
+        if(isClean()){
+            if(latitude == 0.0 || longitude == 0.0){
+                addError("location", "validation.location");
             }
         }
     }

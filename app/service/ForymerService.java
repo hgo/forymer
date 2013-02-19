@@ -6,8 +6,6 @@ import models.Message;
 
 public class ForymerService {
 
-    static CacheService cacheService = CacheService.getInstance();
-
     public static void setLocation(double lng, double lat, Chatter c) {
         c.setGeoLocation(GeoLocation.fromDegrees(lat, lng));
         c.save();

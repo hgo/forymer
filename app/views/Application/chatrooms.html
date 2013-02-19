@@ -9,16 +9,15 @@
 		#{list items:rooms, as:'room'}
 			<li data-formid="f${room.id}" class="chatroomlistli" ><form id="f${room.id}" action="@{Application.join}" method="post" style="display: none">
 				<input type="hidden" value="${room.id}" name="c.id">
-<!-- 				<input type="submit" value="${room.name} (${room.chatterCount})"> -->
 				</form>
-				<img border="0" src="//maps.googleapis.com/maps/api/staticmap?center=${request.args.chatter.geoLocation.degLat+',' + request.args.chatter.geoLocation.degLon}&amp;zoom=15&amp;size=180x180&amp;sensor=false" alt="Greenwich, England">
-				<a href="#">${room.name} (${room.chatterCount})</a>
+<!-- 				<img border="0" src="//maps.googleapis.com/maps/api/staticmap?center=${request.args.chatter.geoLocation.degLat+',' + request.args.chatter.geoLocation.degLon}&amp;zoom=15&amp;size=180x180&amp;sensor=false" alt="Greenwich, England"> -->
+				<a href="#" data-transition="flow">${room.name} (${room.chatterCount})</a>
 				
 			</li> 
 		#{/list} 
 			<li><a href="#createchatroom">&{'create.room'}</a></li>
 		</ul>
-		<img border="0" src="//maps.googleapis.com/maps/api/staticmap?center=${request.args.chatter.geoLocation.degLat+',' + request.args.chatter.geoLocation.degLon}&amp;zoom=15&amp;size=180x180&amp;sensor=false" alt="Greenwich, England">
+<!-- 		<img border="0" src="//maps.googleapis.com/maps/api/staticmap?center=${request.args.chatter.geoLocation.degLat+',' + request.args.chatter.geoLocation.degLon}&amp;zoom=15&amp;size=180x180&amp;sensor=false" alt="Greenwich, England"> -->
 		<!-- /listview-->
 	</div>
 	<!-- /content -->

@@ -15,6 +15,11 @@ public class CommandController extends Controller {
             command.AbstractCommand command = params.get(annotation.name(), annotation.clazz());
             command.validate();
             if (validation.hasErrors()) {
+                if(!request.isAjax()){
+                    String from = params.get("from");
+                    validation.keep();
+                    redirect(from);
+                }
                 jsonBuilder().buildAndRenderError();
             }
         }

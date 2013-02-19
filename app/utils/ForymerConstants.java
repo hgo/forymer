@@ -4,7 +4,6 @@ import models.Chatter;
 import play.cache.Cache;
 import play.mvc.Http.Request;
 import play.mvc.Scope.Session;
-import service.CacheService;
 
 public class ForymerConstants {
 
@@ -25,7 +24,7 @@ public class ForymerConstants {
 
     // comes from logger
     public static void putCurrentChatter(Chatter chatter) {
-        CacheService.getInstance().updateOrPut(Session.current().getId(), chatter.id, Long.class, "1h");
+        Cache.set(Session.current().getId(), chatter.id, "1h");
     }
     
     public static void logoutChatter() {
